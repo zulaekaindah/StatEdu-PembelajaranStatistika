@@ -5,8 +5,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Kalkulator Statistik — Cerdas</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html-docx-js/0.4.1/html-docx.min.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     :root {
       --bg: #e9eff7;
@@ -331,21 +331,23 @@
       }
     }
 
-    /* ✨ Tombol Download Word lebih cantik */
-    #downloadWord {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-    }
+    
 
-    #downloadWord:hover {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
-    }
+  /* ✨ Tombol Download PDF */
+  #downloadPdf {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  #downloadPdf:hover {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(22, 163, 74, 0.4);
+  }
 
     footer {
       margin-top: 40px;
@@ -383,7 +385,7 @@
       <button id="calc" class="primary">Hitung</button>
       <button id="clear" class="ghost">Hapus</button>
       <button id="show-steps" class="ghost">Langkah</button>
-      <button id="downloadWord" class="btn">Download Word</button>
+      <button id="downloadPdf" class="btn">Download PDF</button>
     </div>
 
     <div class="grid">
@@ -458,11 +460,10 @@
       </div>
     </div>
   </div>
-
+  
   <footer>
     © 2025 StatEdu - Platform Pembelajaran Statistika
   </footer>
-
   <script>
     // Utility selectors
     const $ = s => document.querySelector(s);
@@ -1252,98 +1253,106 @@
     // Download to Word document
   </script>
   <script>
-    document.getElementById("downloadWord").addEventListener("click", function () {
-      const judul = document.querySelector("h1")?.innerText || "Kalkulator Statistik";
+    // Download PDF of the visible calculator content
+    (function () {
+      const btn = document.getElementById('downloadPdf');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        try {
+          // Pastikan langkah sudah dihitung agar hasil lengkap bila belum ada
+          const stepsContentEl = document.getElementById('steps-content');
+          if (!stepsContentEl || stepsContentEl.innerHTML.trim() === '') {
+            const calcBtn = document.getElementById('calc');
+            if (calcBtn) calcBtn.click();
+          }
 
-      // ===== CEK MODE =====
-      const mode = document.getElementById("mode").value;
-      let dataHTML = "";
+          const judul = (document.querySelector('h1')?.innerText || 'Kalkulator Statistik');
+          const mode = document.getElementById('mode')?.value || 'group';
 
-      // ===== DATA / SOAL =====
-      if (mode === "group") {
-        const table = document.querySelector("#data-table");
-        if (table) {
-          dataHTML = "<h2>Data / Soal</h2>";
-          dataHTML += "<table><thead>" + table.tHead.outerHTML + "</thead><tbody>";
+          // Susun DATA / SOAL
+          let dataHTML = '<h2 style="margin:0 0 6px 0;">Data / Soal</h2>';
+          if (mode === 'group') {
+            const table = document.querySelector('#data-table');
+            if (table) {
+              // susun thead tanpa kolom tombol hapus
+              const ths = Array.from(table.tHead.querySelectorAll('th'));
+              let headerCells = '';
+              ths.forEach((th, i) => {
+                const txt = th.textContent.trim();
+                if (txt !== '') headerCells += `<th>${txt}</th>`;
+              });
+              dataHTML += '<table class="doc-table"><thead><tr>' + headerCells + '</tr></thead><tbody>';
+              const rows = table.querySelectorAll('tbody tr');
+              rows.forEach(row => {
+                let newRow = '<tr>';
+                const tds = Array.from(row.querySelectorAll('td'));
+                tds.forEach((cell, idx) => {
+                  const input = cell.querySelector('input');
+                  const isDeleteCol = (idx === tds.length - 1);
+                  if (isDeleteCol) return; // skip kolom tombol hapus
+                  if (input) {
+                    newRow += `<td>${(input.value || '').toString()}</td>`;
+                  } else {
+                    newRow += `<td>${cell.textContent.trim()}</td>`;
+                  }
+                });
+                newRow += '</tr>';
+                dataHTML += newRow;
+              });
+              dataHTML += '</tbody></table>';
+            } else {
+              dataHTML += '<p>Tidak ada data kelompok.</p>';
+            }
+          } else {
+            const dataTunggal = document.getElementById('single-input')?.value.trim();
+            dataHTML += dataTunggal ? `<p>${dataTunggal}</p>` : '<p>Tidak ada data tunggal yang dimasukkan.</p>';
+          }
 
-          const rows = table.querySelectorAll("tbody tr");
-          rows.forEach((row) => {
-            let newRow = "<tr>";
-            row.querySelectorAll("td").forEach((cell) => {
-              const input = cell.querySelector("input");
-              if (input) {
-                // Ambil nilai input (kelas, fi, xi)
-                newRow += `<td>${input.value || ""}</td>`;
-              } else if (cell.textContent.trim() === "Hapus") {
-                // Skip tombol hapus
-              } else {
-                newRow += `<td>${cell.textContent.trim()}</td>`;
-              }
-            });
-            newRow += "</tr>";
-            dataHTML += newRow;
-          });
+          // Susun LANGKAH
+          const langkahEl = document.getElementById('steps-content');
+          const langkahHTML = (langkahEl && langkahEl.innerHTML.trim() !== '')
+            ? `<h2 style=\"margin:16px 0 6px 0;\">Langkah-langkah Perhitungan</h2>${langkahEl.innerHTML}`
+            : '<h2 style="margin:16px 0 6px 0;">Langkah-langkah Perhitungan</h2><p>Belum ada langkah yang ditampilkan.</p>';
 
-          dataHTML += "</tbody></table>";
-        } else {
-          dataHTML = "<p>Tidak ada data kelompok.</p>";
+          // Buat kontainer sementara khusus untuk PDF
+          const container = document.createElement('div');
+          container.className = 'doc-root';
+          container.innerHTML = `
+            <style>
+              .doc-root { font-family: Calibri, Arial, sans-serif; color: #111827; }
+              .doc-root h1 { font-size: 20px; margin: 0 0 8px 0; }
+              .doc-root h2 { font-size: 14px; margin: 16px 0 6px 0; padding-bottom: 4px; border-bottom: 1px solid #e5e7eb; }
+              .doc-section { margin-bottom: 8px; page-break-inside: avoid; }
+              .doc-table { border-collapse: collapse; width: 100%; margin-top: 6px; font-size: 12px; }
+              .doc-table th { background: #eef5ff; color: #1f2937; font-weight: 600; }
+              .doc-table th, .doc-table td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: center; }
+              .doc-table tr { page-break-inside: avoid; }
+              .doc-header { text-align: center; }
+              /* Page break hints for html2pdf */
+              .page-break { page-break-before: always; }
+            </style>
+            <div class="doc-header"><h1>${judul}</h1></div>
+            <div class="doc-section">${dataHTML}</div>
+            <div class="doc-section">${langkahHTML}</div>
+          `;
+
+          const opt = {
+            margin:       12,
+            filename:     'Hasil_Statistik.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak:    { mode: ['css', 'legacy'] }
+          };
+
+          html2pdf().set(opt).from(container).save();
+        } catch (e) {
+          alert('Gagal membuat PDF. Coba lagi.');
         }
-      } else {
-        // Data tunggal
-        const dataTunggal = document.getElementById("single-input")?.value.trim();
-        dataHTML = "<h2>Data / Soal</h2>";
-        dataHTML += dataTunggal ?
-          `<p>${dataTunggal}</p>` :
-          "<p>Tidak ada data tunggal yang dimasukkan.</p>";
-      }
-
-      // ===== LANGKAH =====
-      const langkahEl = document.querySelector("#steps-content");
-      let langkahHTML = "";
-
-      if (langkahEl && langkahEl.innerHTML.trim() !== "") {
-        langkahHTML = `<h2>Langkah-langkah Perhitungan</h2>${langkahEl.innerHTML}`;
-      } else {
-        langkahHTML = "<h2>Langkah-langkah Perhitungan</h2><p>Belum ada langkah yang ditampilkan.</p>";
-      }
-
-      // ===== SUSUN DOKUMEN =====
-      const content = `
-    <html xmlns:o="urn:schemas-microsoft-com:office:office"
-          xmlns:w="urn:schemas-microsoft-com:office:word"
-          xmlns="http://www.w3.org/TR/REC-html40">
-    <head>
-      <meta charset="utf-8">
-      <title>${judul}</title>
-      <style>
-        body { font-family: Calibri, sans-serif; margin: 40px; line-height: 1.5; }
-        h1, h2 { text-align: center; color: #222; margin-bottom: 10px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-        th, td { border: 1px solid #444; padding: 6px; text-align: center; }
-        p { margin: 4px 0; }
-      </style>
-    </head>
-    <body>
-      <h1>${judul}</h1>
-      ${dataHTML}
-      ${langkahHTML}
-    </body>
-    </html>
-  `;
-
-      // ===== DOWNLOAD WORD =====
-      const blob = new Blob(["\ufeff", content], {
-        type: "application/msword"
       });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "Hasil_Statistik.doc";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+    })();
   </script>
+  
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       // 🧹 Sembunyikan langkah ketika mode berubah atau dihapus

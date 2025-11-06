@@ -29,24 +29,57 @@
             font-size: 1rem;
         }
 
+        /* 🌟 BAGIAN CAPAIAN */
+        .learning-goal {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 750px;
+            margin: 20px auto 30px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            border-left: 6px solid #007bff;
+            text-align: left;
+        }
+
+        .learning-goal h3 {
+            margin-top: 0;
+            color: #007bff;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .learning-goal ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .learning-goal li {
+            margin-bottom: 8px;
+            padding-left: 1.2rem;
+            position: relative;
+            color: #444;
+        }
+
+        .learning-goal li::before {
+            content: "🎯";
+            position: absolute;
+            left: 0;
+        }
+
         main {
             max-width: 900px;
-            margin: 30px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            flex-direction: column;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
             padding: 20px;
-            overflow-x: visible;
         }
 
         .card {
             background: #fff;
             border-radius: 20px;
             padding: 25px;
-            width: 280px;
-            height: 200px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -56,6 +89,7 @@
             transition: all 0.3s ease;
             cursor: pointer;
             border-top: 5px solid transparent;
+            height: 220px;
         }
 
         .card:hover {
@@ -83,26 +117,32 @@
         }
 
         .icon {
-            font-size: 32px;
+            font-size: 36px;
             margin-bottom: 8px;
         }
 
-        .btn-back {
-            display: block;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: 0.3s;
-            font-size: 0.95rem;
-            width: fit-content;
-            margin: 24px auto;
+        /* === FLOATING BACK BUTTON === */
+        .back-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: rgb(43, 43, 255);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 999;
         }
 
-        .btn-back:hover {
-            background-color: #0056b3;
+        .back-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
         }
+
 
         footer {
             margin-top: 40px;
@@ -119,6 +159,18 @@
         <p class="sub" id="sub">Pilih menu untuk melanjutkan</p>
     </header>
 
+    <!-- 🌟 CAPAIAN PEMBELAJARAN -->
+    <section class="learning-goal">
+        <h3>Capaian Pembelajaran</h3>
+        <ul>
+            <li>Memahami konsep pemusatan dan penyebaran data dalam konteks kehidupan nyata.</li>
+            <li>Mampu menghitung mean, median, dan modus dari sekumpulan data.</li>
+            <li>Mampu menentukan rentang, simpangan, dan varians data.</li>
+            <li>Menginterpretasikan hasil analisis data untuk pengambilan keputusan sederhana.</li>
+        </ul>
+    </section>
+
+    <!-- 📘 PILIHAN MATERI (SEJARAH SAMPING KANAN-KIRI) -->
     <main>
         <a href="pemusatan-data.html" style="text-decoration: none;">
             <div class="card blue">
@@ -137,7 +189,7 @@
         </a>
     </main>
 
-    <a href="student-dashboard.html" class="btn-back">← Kembali ke Dashboard</a>
+    <button class="back-btn" onclick="goBack()"> ⬅ Dashboard</button>
 
     <footer>
         © 2025 StatEdu - Platform Pembelajaran Statistika
@@ -145,43 +197,30 @@
 
     <script>
         (function init() {
-            // Ambil data user yang disimpan saat login (key: app_user)
             const raw = localStorage.getItem('app_user');
             let name = null;
-            let loggedAt = null;
-            let role = null;
 
             if (raw) {
                 try {
                     const u = JSON.parse(raw);
                     name = u.name || null;
-                    loggedAt = u.loggedAt || null;
-                    role = u.role || null;
                 } catch (e) {
-                    // jika gagal parse, biarkan default
                     console.warn('Gagal membaca session:', e);
                 }
             }
 
-            // Fallback jika ada key lama/terpisah
             if (!name) name = localStorage.getItem('namaSiswa') || 'Siswa';
 
-            // Isi header
             const greetEl = document.getElementById('greet');
-            const subEl = document.getElementById('sub');
             if (greetEl) greetEl.textContent = `${name}, Mau Belajar Apa Hari Ini?`;
         })();
 
-        // tombol kembali / logout (jika ada)
-        const btnBack = document.getElementById('btnBack');
-        if (btnBack) btnBack.addEventListener('click', () => location.href = 'student-dashboard.html');
-
-        const btnLogout = document.getElementById('btnLogout');
-        if (btnLogout) btnLogout.addEventListener('click', () => {
-            localStorage.removeItem('app_user');
-            location.href = 'index.html';
-        });
+        // tombol kembali
+        function goBack() {
+            window.location.href = "student-dashboard.html";
+        }
     </script>
+
 </body>
 
 </html>

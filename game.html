@@ -33,6 +33,71 @@
       padding: 20px;
     }
 
+    /* Popup overlay */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    /* Isi popup */
+    .popup-content {
+      background: #fff;
+      color: #333;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.5s ease;
+    }
+
+    .popup-content h2 {
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+
+    .popup-content p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .popup-content button {
+      background: linear-gradient(90deg, #007bff, #00c9a7);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .popup-content button:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .wrap {
       width: 100%;
       max-width: 960px;
@@ -284,6 +349,16 @@
 </head>
 
 <body>
+  <!-- POPUP INTRO -->
+  <div id="introPopup" class="popup-overlay">
+    <div class="popup-content">
+      <h2>🎮 Selamat Datang di Game Statistik!</h2>
+      <p>Uji kemampuanmu dalam memahami konsep <strong>Pemusatan</strong> dan <strong>Penyebaran Data</strong> lewat 5
+        level seru.
+        Jawab dengan benar untuk mengumpulkan skor tertinggi!</p>
+      <button id="startGameBtn">Mulai Sekarang 🚀</button>
+    </div>
+  </div>
   <div class="wrap">
     <header>
       <div class="title-row">
@@ -767,6 +842,22 @@
 
       startTimer();
     }
+    // Tampilkan popup saat halaman game dibuka
+    window.addEventListener('load', () => {
+      const popup = document.getElementById('introPopup');
+      const startBtn = document.getElementById('startGameBtn');
+
+      popup.style.display = 'flex';
+
+      startBtn.addEventListener('click', () => {
+        popup.style.display = 'none';
+        // Jalankan fungsi mulai game
+        if (typeof loadQuestion === 'function') {
+          loadQuestion();
+        }
+      });
+    });
+
 
     // (submitAnswer dihapus)
 

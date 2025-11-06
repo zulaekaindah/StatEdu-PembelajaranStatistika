@@ -344,6 +344,20 @@
                 border: 2px solid #c7d2fe;
             }
         }
+
+        /* Responsive reference links */
+        .ref-link {
+            display: inline-block;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        /* Normalize white card hero sections */
+        .card.hero {
+            background: #ffffff !important;
+            border-radius: 14px;
+        }
     </style>
 </head>
 
@@ -359,6 +373,30 @@
 
         <div class="panel">
             <main>
+                <section class="card hero" style="border-left: 5px solid #2f6bff;">
+                    <h2>Tujuan Pembelajaran</h2>
+                    <p style="color:#475569; line-height:1.6;">
+                        Setelah mempelajari materi ini, siswa diharapkan mampu menentukan ukuran pemusatan data berupa
+                        mean,
+                        modus dan median, menganalisis ukuran pemusatan
+                        data yang disajikan dalam bentuk tabel distribusi frekuensi serta
+                        menggunakannnya untuk menyelesaikan masalah.</p>
+                </section>
+                <section class="card hero" style="border-left: 5px solid #8b5cf6;">
+                    <h2>Referensi</h2>
+                    <p style="color:#475569; margin-left:20px; line-height:1.6;">
+                        Achmad, Asmar. (2020).
+                        <em>Modul Matematika Umum Kelas XII KD 3.2: Statistika</em>.
+                        Makassar: SMA Negeri 17 Makassar & Direktorat SMA, Direktorat Jenderal PAUD, DIKDAS dan DIKMEN.
+                        Tersedia secara daring di repositori Kementerian Pendidikan dan Kebudayaan:
+                        <br>
+                        👉
+                        <a class="ref-link"
+                            href="https://repositori.kemendikdasmen.go.id/21944/1/XII_Matematika-Umum_KD-3.2_Final.pdf"
+                            target="_blank" rel="noopener" style="color:#ff6b81;text-decoration:none;font-weight:600;">
+                            https://repositori.kemendikdasmen.go.id/21944/1/XII_Matematika-Umum_KD-3.2_Final.pdf
+                        </a></p>
+                </section>
                 <!-- Mean -->
                 <section class="card blue" aria-labelledby="mean-title">
                     <div class="icon" aria-hidden="true">📘</div>

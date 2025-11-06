@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tentang Pengembang | StatEdu</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #fff5f8, #ffe6e9);
+            color: #222;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(90deg, #ff6b81, #ff9f43);
+            color: white;
+            text-align: center;
+            padding: 60px 20px 80px;
+            border-bottom-left-radius: 60px;
+            border-bottom-right-radius: 60px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.3rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        header span {
+            color: #fff176;
+        }
+
+        .subtitle {
+            font-size: 1.05rem;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: -50px auto 60px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .profile-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .profile-img {
+            width: 130px;
+            height: 130px;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            border: 4px solid #ff6b81;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(255, 107, 129, 0.4);
+            image-rendering: -webkit-optimize-contrast;
+            /* Safari/Chrome */
+            image-rendering: crisp-edges;
+            /* Firefox */
+            -ms-interpolation-mode: nearest-neighbor;
+            /* IE legacy */
+            transform: translateZ(0);
+            /* avoid subpixel blur */
+            backface-visibility: hidden;
+            will-change: transform;
+            filter: contrast(1.06) saturate(1.08);
+        }
+
+        h2 {
+            color: #ff6b81;
+            margin: 10px 0 5px;
+            font-size: 1.6rem;
+        }
+
+        .role {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 18px;
+        }
+
+        p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .bio {
+            background: #fff8f9;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: left;
+            margin-top: 15px;
+            box-shadow: inset 0 0 10px rgba(255, 107, 129, 0.1);
+        }
+
+        .bio p {
+            margin: 6px 0;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .skill {
+            background: #ffe6e9;
+            color: #ff6b81;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .skill:hover {
+            background: #ff6b81;
+            color: white;
+        }
+
+        .motto {
+            font-style: italic;
+            color: #444;
+            background: #fff0f2;
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 15px;
+            box-shadow: 0 3px 8px rgba(255, 107, 129, 0.1);
+        }
+
+        .back-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: linear-gradient(90deg, #ff6b81, #ff9f43);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .profile-img {
+                width: 110px;
+                height: 110px;
+            }
+
+            .back-btn {
+                padding: 10px 14px;
+            }
+        }
+
+        /* Standard-DPI: kecilkan sedikit agar terlihat lebih tajam di sumber resolusi rendah */
+        @media (max-resolution: 120dpi) {
+            .profile-img {
+                width: 110px;
+                height: 110px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>👩‍💻 Tentang <span>Pengembang</span></h1>
+        <p class="subtitle">Kenali sosok di balik aplikasi StatEdu</p>
+    </header>
+
+    <div class="container">
+        <div class="profile-card">
+            <img src="Image/me.jpg" alt="Foto Pengembang" class="profile-img" width="130" height="130" loading="eager"
+                decoding="async" fetchpriority="high" />
+            <h2>Zulaeka Indah Sriyani</h2>
+            <p class="role">Mahasiswa Tadris Matematika | UIN K.H. Abdurrahman Wahid Pekalongan</p>
+            <p>
+                Halo! Saya <strong>Zulaeka Indah Sriyani</strong>, lahir di Pekalongan pada 15 Juli 2004.
+                Saya memiliki ketertarikan pada pengembangan media pembelajaran berbasis teknologi,
+                khususnya dalam bidang <strong>Pendidikan Matematika</strong>.
+            </p>
+            <p>
+                Aplikasi <strong>StatEdu</strong> ini saya kembangkan sebagai bagian dari upaya menghadirkan
+                pembelajaran yang lebih interaktif dan menyenangkan bagi siswa, dengan pendekatan berbasis
+                teknologi dan desain yang ramah pengguna.
+            </p>
+
+            <div class="bio">
+                <p><strong>Nama Lengkap :</strong> Zulaeka Indah Sriyani</p>
+                <p><strong>Tempat, Tanggal Lahir :</strong> Pekalongan, 15 Juli 2004</p>
+                <p><strong>Alamat :</strong> Desa Rowolaku, Kec. Kajen, Kab. Pekalongan</p>
+                <p><strong>Universitas :</strong> UIN K.H. Abdurrahman Wahid Pekalongan</p>
+                <p><strong>Program Studi :</strong> Tadris Matematika</p>
+                <p><strong>Minat :</strong> Teknologi Pendidikan, Desain Media Interaktif, dan Pengembangan Media
+                    Website
+                </p>
+                <p><strong>WhatsApp : </i></strong>+62 858 0283 6526</p>
+                <p><strong>Email :</i></strong>sayazulaekaaa@gmail.com</p>
+            </div>
+
+            <div class="skills">
+                <span class="skill">Design</span>
+                <span class="skill">Dasar HTML</span>
+                <span class="skill">CSS</span>
+                <span class="skill">JavaScript</span>
+                <span class="skill">Media Pembelajaran</span>
+            </div>
+
+            <div class="motto">
+                “<strong>Man Tsabata Nabata</strong>” — Siapa yang bersungguh-sungguh, akan berhasil 💫
+            </div>
+        </div>
+    </div>
+
+    <button class="back-btn" onclick="goBack()"> ⬅ Dashboard</button>
+
+    <footer>
+        © 2025 StatEdu - Platform Pembelajaran Statistika
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const card = document.querySelector(".profile-card");
+            setTimeout(() => {
+                card.classList.add("show");
+            }, 300);
+        });
+
+        function goBack() {
+            window.location.href = "student-dashboard.html";
+        }
+    </script>
+</body>
+
+</html>
