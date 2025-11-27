@@ -282,6 +282,18 @@
             text-align: center
         }
 
+        /* Prevent numbers/labels in table cells from breaking to next line */
+        table.calc th,
+        table.calc td {
+            white-space: nowrap;
+        }
+
+        /* Allow horizontal scroll on small screens so cells won't wrap */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         table.calc thead th {
             background: #f1f5ff;
             color: var(--muted);
@@ -435,24 +447,26 @@
                     <!-- Mean Data Kelompok -->
 
                     <div style="margin-top:12px">
-                        <table class="calc" aria-label="Perhitungan mean tunggal">
-                            <thead>
-                                <tr>
-                                    <th>Data (x)</th>
-                                    <th>Jumlah</th>
-                                    <th>n</th>
-                                    <th>Mean</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>6,7,8,9,10</td>
-                                    <td>Σx = 40</td>
-                                    <td>5</td>
-                                    <td>8</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="calc" aria-label="Perhitungan mean tunggal">
+                                <thead>
+                                    <tr>
+                                        <th>Data (x)</th>
+                                        <th>Jumlah</th>
+                                        <th>n</th>
+                                        <th>Mean</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>6,7,8,9,10</td>
+                                        <td>Σx = 40</td>
+                                        <td>5</td>
+                                        <td>8</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div><b>Rumus Mean data Kelompok :</b></div>
                     <div class="formula">
